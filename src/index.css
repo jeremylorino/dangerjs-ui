@@ -1,13 +1,103 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+@tailwind base;
+
+/** Base styles */
+@layer base {
+  .btn,
+  button,
+  [type="button"],
+  [type="reset"],
+  [type="submit"] {
+    @apply flex px-3 py-2 text-base rounded justify-center items-center font-bold;
+  }
+
+  .bg-darken {
+    filter: brightness(80%);
+  }
+
+  .bg-lighten,
+  .bg-lighten-hover:hover {
+    filter: brightness(120%);
+  }
+
+  .btn:hover,
+  .btn:focus,
+  button:hover,
+  button:focus {
+    filter: brightness(120%);
+  }
+
+  .disabled,
+  input:disabled,
+  button:disabled {
+    opacity: 0.7;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+
+  a,
+  .link {
+    @apply cursor-pointer text-secondary;
+  }
+
+  .link:hover,
+  .link:focus,
+  a:hover,
+  a:focus {
+    filter: brightness(120%);
+    text-decoration: underline;
+  }
+
+  a.no-underline:hover,
+  a.no-underline:focus {
+    text-decoration: none;
+  }
+
+  button:focus {
+    @apply ring-2 ring-indigo-400;
+  }
+
+  button:active {
+    @apply scale-95;
+  }
+
+  input,
+  [type="text"],
+  [type="email"],
+  [type="password"],
+  [type="search"],
+  [type="tel"],
+  [type="url"],
+  textarea {
+    border-radius: 0.2em;
+  }
+
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+}
+
+@tailwind components;
+@tailwind utilities;
+
+@import "./App.css";
