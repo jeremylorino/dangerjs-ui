@@ -1,3 +1,4 @@
+import { merge } from "lodash";
 import { useReactQueryAutoSync } from "use-react-query-auto-sync";
 
 type ExpressionType = "expression" | "condition" | "assignment";
@@ -54,18 +55,80 @@ const STATEMENTS: Statement[] = [
   },
 ];
 
-function getStatements() {
-  return STATEMENTS;
+function listStatements() {
+  return new Promise<Statement[]>((resolve) => {
+    setTimeout(() => {
+      resolve(STATEMENTS);
+    }, 1000);
+  });
 }
 
+function getStatement({ id }: { id: string }) {
+  return new Promise<Statement>((resolve) => {
+    setTimeout(() => {
+      resolve(STATEMENTS.find((statement) => statement.id === id)!);
+    }, 1000);
+  });
+}
+
+function updateStatement(statement: Statement) {
+  return new Promise<Statement>((resolve) => {
+    setTimeout(() => {
+      resolve(merge({}, statement));
+    }, 1000);
+  });
+}
+
+function updateStatements(statements: Statement[]) {
+  return new Promise<Statement[]>((resolve) => {
+    setTimeout(() => {
+      resolve([...statements]);
+    }, 1000);
+  });
+}
+
+const statementKeys = {
+  all: ["statement"] as const,
+  lists: () => [...statementKeys.all, "list"] as const,
+  list: (filters: string) => [...statementKeys.lists(), { filters }] as const,
+  details: () => [...statementKeys.all, "detail"] as const,
+  detail: (id: string) => [...statementKeys.details(), id] as const,
+};
+
 export function useStatements() {
-  const { draft, setDraft, queryResult } = useReactQueryAutoSync({
+  const { draft: statements } = useReactQueryAutoSync({
     queryOptions: {
-      /* omitted but same as react-query */
+      queryKey: statementKeys.lists(),
+      queryFn: listStatements,
     },
     mutationOptions: {
-      /* omitted but same as react-query */
+      mutationKey: statementKeys.details(),
+      mutationFn: updateStatements,
     },
-    autoSaveOptions: { wait: 1000 },
+    autoSaveOptions: {
+      wait: 500,
+    },
+    alertIfUnsavedChanges: true,
   });
+
+  return [statements] as const;
+}
+
+export function useStatement(id: Statement["id"]) {
+  const { draft: statement, setDraft: setStatement } = useReactQueryAutoSync({
+    queryOptions: {
+      queryKey: statementKeys.detail(id),
+      queryFn: () => getStatement({ id }),
+    },
+    mutationOptions: {
+      mutationKey: statementKeys.detail(id),
+      mutationFn: updateStatement,
+    },
+    autoSaveOptions: {
+      wait: 500,
+    },
+    alertIfUnsavedChanges: true,
+  });
+
+  return [statement, setStatement] as const;
 }

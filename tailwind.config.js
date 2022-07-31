@@ -6,8 +6,12 @@ module.exports = {
       colors: {
         light: "#f6f7f9",
         silver: "#e5e7eb",
-        dark: "#1b3a57",
-        primary: "#ffcb2c",
+        dark: "#212121",
+        primary: {
+          dark: "#0097A7",
+          light: "#B2EBF2",
+          main: "#00BCD4",
+        },
         secondary: "#1a73e8",
         danger: "#881817",
         success: "#28a745",
